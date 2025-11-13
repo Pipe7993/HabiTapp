@@ -1,58 +1,40 @@
-package com.example.habitapp
+package com.example.habitapp.ui
 
 import android.os.Bundle
-import android.view.Menu
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.example.habitapp.databinding.ActivityMainBinding
+import androidx.fragment.app.Fragment
+import com.example.habitapp.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMainBinding
+    private val fragmentHabitos: Fragment = HabitsFragment()
+    private val fragmentTareas: Fragment = TasksFragment()
+    private val fragmentEstadisticas: Fragment = StatsFragment()
+    private val fragmentAjustes: Fragment = SettingsFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        // Mostrar fragmento por defecto
+        mostrarFragmento(fragmentHabitos)
 
-        setSupportActionBar(binding.appBarMain.toolbar)
-
-        binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .setAnchorView(R.id.fab).show()
+        val barraNavegacion = findViewById<BottomNavigationView>(R.id.barra_navegacion)
+        barraNavegacion.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_habitos -> mostrarFragmento(fragmentHabitos)
+                R.id.nav_tareas -> mostrarFragmento(fragmentTareas)
+                R.id.nav_estadisticas -> mostrarFragmento(fragmentEstadisticas)
+                R.id.nav_ajustes -> mostrarFragmento(fragmentAjustes)
+            }
+            true
         }
-        val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
-            ), drawerLayout
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    private fun mostrarFragmento(fragmento: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_contenedor, fragmento)
+            .commit()
     }
 }
