@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
-        android:id="@+id/nav_habitos"
-        android:icon="@android:drawable/ic_menu_agenda"
-        android:title="Hábitos" />
+        android:id="@+id/nav_estadisticas"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="Estadísticas" />
     <item
         android:id="@+id/nav_tareas"
         android:icon="@android:drawable/ic_menu_edit"
         android:title="Tareas" />
     <item
-        android:id="@+id/nav_estadisticas"
-        android:icon="@android:drawable/ic_menu_info_details"
-        android:title="Estadísticas" />
+        android:id="@+id/nav_habitos"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Hábitos" />
     <item
         android:id="@+id/nav_ajustes"
         android:icon="@android:drawable/ic_menu_preferences"
