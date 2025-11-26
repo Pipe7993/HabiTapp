@@ -10,10 +10,22 @@
           <value>
             <set>
               <option value="12ebbb84-6390-4395-9a29-1ad0c63b81a7" />
+              <option value="5978e280-f139-4685-8386-4ef3176321ee" />
             </set>
           </value>
         </entry>
       </map>
     </option>
+    <pendingWorkingSetItems>
+      <entry key="7604c508-3fe4-46d0-a00c-4d8adf5ab2ea">
+        <set>
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/home/HomeFragment.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/home/HomeViewModel.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/slideshow/SlideshowViewModel.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/PrincipalViewModel.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/test/java/com/example/habitapp/ui/PrincipalViewModelTest.kt" />
+        </set>
+      </entry>
+    </pendingWorkingSetItems>
   </component>
 </project>
