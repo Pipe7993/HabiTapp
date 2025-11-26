@@ -1,18 +1,21 @@
 package com.example.habitapp.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import com.example.habitapp.model.Habito
 import com.example.habitapp.model.Tarea
 import java.util.Date
 
 class PrincipalViewModel : ViewModel() {
-    private val _listaHabitos = MutableLiveData<List<Habito>>(emptyList())
-    val listaHabitos: LiveData<List<Habito>> = _listaHabitos
+    data class UiState(
+        val habitos: List<Habito> = emptyList(),
+        val tareas: List<Tarea> = emptyList()
+    )
 
-    private val _listaTareas = MutableLiveData<List<Tarea>>(emptyList())
-    val listaTareas: LiveData<List<Tarea>> = _listaTareas
+    private val _state = MutableStateFlow(UiState())
+    val state: StateFlow<UiState> = _state
 
     private var siguienteIdHabito = 1
     private var siguienteIdTarea = 1
@@ -26,12 +29,15 @@ class PrincipalViewModel : ViewModel() {
             Progreso = 0,
             Estado = "Pendiente"
         )
-        _listaHabitos.value = _listaHabitos.value.orEmpty() + nuevo
+        _state.update { it.copy(habitos = it.habitos + nuevo) }
     }
 
     fun alternarHabito(id: Int) {
-        _listaHabitos.value = _listaHabitos.value.orEmpty().map {
-            if (it.id == id) it.copy(Estado = if (it.Estado == "Pendiente") "Completo" else "Pendiente") else it
+        _state.update { current ->
+            val actualizados = current.habitos.map { h ->
+                if (h.id == id) h.copy(Estado = if (h.Estado == "Pendiente") "Completo" else "Pendiente") else h
+            }
+            current.copy(habitos = actualizados)
         }
     }
 
@@ -44,12 +50,15 @@ class PrincipalViewModel : ViewModel() {
             Prioridad = 0,
             Estado = "Pendiente"
         )
-        _listaTareas.value = _listaTareas.value.orEmpty() + nueva
+        _state.update { it.copy(tareas = it.tareas + nueva) }
     }
 
     fun alternarTarea(id: Int) {
-        _listaTareas.value = _listaTareas.value.orEmpty().map {
-            if (it.id == id) it.copy(completado = !it.completado) else it
+        _state.update { current ->
+            val actualizadas = current.tareas.map { t ->
+                if (t.id == id) t.copy(completado = !t.completado) else t
+            }
+            current.copy(tareas = actualizadas)
         }
     }
 }
