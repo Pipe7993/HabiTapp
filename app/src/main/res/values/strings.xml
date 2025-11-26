@@ -15,4 +15,8 @@
     <string name="title_tasks">Tareas</string>
     <string name="title_stats">Estadísticas</string>
     <string name="title_settings">Ajustes</string>
+    <string name="habit_name_sample">Nombre hábito</string>
+    <string name="habit_sub_sample">Descripción breve</string>
+    <string name="stat_label_sample">Tareas completadas</string>
+    <string name="stat_value_sample">12</string>
 </resources>
