@@ -21,13 +21,12 @@ class TasksFragment : Fragment() {
 
         val rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_tasks)
         adapter = TasksAdapter { item ->
-            // Al hacer click, togglear estado done
+            
             viewModel.toggleDone(item.id)
         }
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = adapter
 
-        // Observar LiveData
         viewModel.tasks.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
         }

@@ -21,12 +21,11 @@ class HabitsFragment : Fragment() {
 
         val rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_habits)
         adapter = HabitsAdapter { item ->
-            // Placeholder: responder click en hábito (por ejemplo, abrir detalle)
+            
         }
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = adapter
 
-        // Observar LiveData del ViewModel
         viewModel.habits.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
         }

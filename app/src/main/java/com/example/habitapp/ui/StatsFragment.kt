@@ -18,7 +18,6 @@ class StatsFragment : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity())[StatsViewModel::class.java]
 
-        // Referencias a los includes
         val box1 = view.findViewById<View>(R.id.stat_box_1)
         val box2 = view.findViewById<View>(R.id.stat_box_2)
         val box3 = view.findViewById<View>(R.id.stat_box_3)

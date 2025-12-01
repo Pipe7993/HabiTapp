@@ -19,30 +19,25 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Edge-to-edge: permitir que el contenido ocupe toda la pantalla
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContentView(R.layout.activity_main)
 
-        // Ajustar insets dinámicamente para que la UI no quede tapada por status/navigation bars
         val container = findViewById<View>(R.id.fragment_contenedor)
         val barraNavegacion = findViewById<BottomNavigationView>(R.id.barra_navegacion)
 
         ViewCompat.setOnApplyWindowInsetsListener(container) { v, insets ->
             val sysBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            // Aplicar padding top + bottom al contenedor para que el contenido quede visible
             v.setPadding(0, sysBars.top, 0, sysBars.bottom)
             insets
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(barraNavegacion) { v, insets ->
             val navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
-            // Asegurar padding inferior para la barra de navegación
             v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, navBars.bottom)
             insets
         }
 
-        // Mostrar fragmento por defecto
         mostrarFragmento(fragmentHabitos)
 
         barraNavegacion.setOnItemSelectedListener { item ->
