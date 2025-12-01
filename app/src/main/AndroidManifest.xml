@@ -16,10 +16,12 @@
             android:exported="false" />
         <activity
             android:name=".ui.HabitDetailActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Habitapp.NoActionBar" />
         <activity
             android:name=".ui.AddHabitActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Habitapp.NoActionBar" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
@@ -31,6 +33,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.AddTaskActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Habitapp.NoActionBar" />
+        <activity
+            android:name=".ui.TaskDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Habitapp.NoActionBar" />
     </application>
 
 </manifest>

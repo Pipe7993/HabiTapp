@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.habitapp.R
@@ -15,6 +17,24 @@ class StatsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_stats, container, false)
+
+        val header = view.findViewById<View>(R.id.header_stats)
+        val headerTitle = header.findViewById<TextView>(R.id.tv_header_title)
+        val headerSubtitle = header.findViewById<TextView>(R.id.tv_header_subtitle)
+
+        ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            v.setPadding(
+                v.paddingLeft,
+                statusBarHeight + 24,
+                v.paddingRight,
+                v.paddingBottom
+            )
+            insets
+        }
+
+        headerTitle.text = "Estadísticas"
+        headerSubtitle.text = "Tu progreso esta semana"
 
         viewModel = ViewModelProvider(requireActivity())[StatsViewModel::class.java]
 

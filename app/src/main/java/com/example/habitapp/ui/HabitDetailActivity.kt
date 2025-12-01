@@ -2,45 +2,98 @@ package com.example.habitapp.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
-import android.widget.EditText
-import androidx.activity.viewModels
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.habitapp.R
 
 class HabitDetailActivity : AppCompatActivity() {
-    private val viewModel: HabitsViewModel by viewModels()
+    private lateinit var viewModel: HabitsViewModel
+    private var habitId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(R.layout.activity_habit_detail)
 
-        val nameInput = findViewById<EditText>(R.id.input_habit_name_detail)
-        val descInput = findViewById<EditText>(R.id.input_habit_desc_detail)
-        val saveBtn = findViewById<Button>(R.id.btn_update_habit)
-        val openSettingsBtn = findViewById<Button>(R.id.btn_open_settings)
+        // Configurar iconos de la status bar en color claro
+        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+        insetsController.isAppearanceLightStatusBars = false
 
-        val habitId = intent.getIntExtra("habit_id", -1)
-        viewModel.selectHabit(habitId)
+        // Configurar header
+        val header = findViewById<View>(R.id.header_habit_detail)
+        val headerTitle = header.findViewById<TextView>(R.id.tv_header_title)
+        val headerSubtitle = header.findViewById<TextView>(R.id.tv_header_subtitle)
 
-        viewModel.selectedHabit.observe(this, Observer { habit ->
-            if (habit != null) {
-                nameInput.setText(habit.Nombre)
-                descInput.setText(habit.Descripcion)
-            }
-        })
-
-        saveBtn.setOnClickListener {
-            viewModel.updateHabit(
-                nameInput.text?.toString()?.trim().orEmpty(),
-                descInput.text?.toString()?.trim().orEmpty()
-            )
-            finish()
+        ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            v.setPadding(v.paddingLeft, statusBarHeight + 24, v.paddingRight, v.paddingBottom)
+            insets
         }
 
-        openSettingsBtn.setOnClickListener {
-            startActivity(Intent(this, SettingsActivity::class.java))
+        headerTitle.text = "Detalle de Hábito"
+        headerSubtitle.text = "Información completa"
+
+        viewModel = ViewModelProvider(this)[HabitsViewModel::class.java]
+
+        habitId = intent.getIntExtra("habit_id", -1)
+
+        val tvName = findViewById<TextView>(R.id.tv_detail_habit_name)
+        val tvDescription = findViewById<TextView>(R.id.tv_detail_habit_description)
+        val tvStatus = findViewById<TextView>(R.id.tv_detail_habit_status)
+        val tvFrequency = findViewById<TextView>(R.id.tv_detail_habit_frequency)
+        val progressBar = findViewById<ProgressBar>(R.id.progress_detail_habit)
+        val tvProgress = findViewById<TextView>(R.id.tv_detail_habit_progress)
+        val btnEdit = findViewById<Button>(R.id.btn_edit_habit)
+        val btnDelete = findViewById<Button>(R.id.btn_delete_habit)
+        val btnBack = findViewById<Button>(R.id.btn_back_to_habits)
+
+        // Observar hábitos y buscar el actual
+        viewModel.habits.observe(this) { habits ->
+            val habit = habits.find { it.id == habitId }
+            if (habit != null) {
+                tvName.text = habit.Nombre
+                tvDescription.text = habit.Descripcion
+                tvStatus.text = if (habit.Activo) "Activo" else "Inactivo"
+                tvFrequency.text = habit.Frecuencia
+                progressBar.progress = habit.Progreso
+                tvProgress.text = "${habit.Progreso}%"
+            } else {
+                Toast.makeText(this, "Hábito no encontrado", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+
+        btnEdit.setOnClickListener {
+            val intent = Intent(this, AddHabitActivity::class.java)
+            intent.putExtra("habit_id", habitId)
+            startActivity(intent)
+        }
+
+        btnDelete.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("Eliminar Hábito")
+                .setMessage("¿Estás seguro de que deseas eliminar este hábito?")
+                .setPositiveButton("Eliminar") { _, _ ->
+                    viewModel.deleteHabit(habitId)
+                    Toast.makeText(this, "Hábito eliminado", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+        }
+
+        btnBack.setOnClickListener {
+            finish()
         }
     }
 }
+

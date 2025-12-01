@@ -7,4 +7,5 @@ data class Habito(
     val Frecuencia: String,
     val Progreso: Int,
     val Estado: String,
+    val Activo: Boolean = true
 )

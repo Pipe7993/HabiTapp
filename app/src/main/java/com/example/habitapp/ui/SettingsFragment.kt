@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.habitapp.R
@@ -14,6 +17,24 @@ class SettingsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
+
+        val header = view.findViewById<View>(R.id.header_settings)
+        val headerTitle = header.findViewById<TextView>(R.id.tv_header_title)
+        val headerSubtitle = header.findViewById<TextView>(R.id.tv_header_subtitle)
+
+        ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            v.setPadding(
+                v.paddingLeft,
+                statusBarHeight + 24,
+                v.paddingRight,
+                v.paddingBottom
+            )
+            insets
+        }
+
+        headerTitle.text = "Configuración"
+        headerSubtitle.text = "Ajustes de la aplicación"
 
         viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
 

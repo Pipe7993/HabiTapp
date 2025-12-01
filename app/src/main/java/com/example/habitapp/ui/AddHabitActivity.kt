@@ -1,51 +1,94 @@
 package com.example.habitapp.ui
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.view.View
 import android.widget.Button
-import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.habitapp.R
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 
 class AddHabitActivity : AppCompatActivity() {
-    private val viewModel: HabitsViewModel by viewModels()
+    private lateinit var viewModel: HabitsViewModel
+    private var editingHabitId: Int = -1
+    private var isEditMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(R.layout.activity_add_habit)
 
-        val nameInput = findViewById<EditText>(R.id.input_habit_name)
-        val descInput = findViewById<EditText>(R.id.input_habit_desc)
-        val saveBtn = findViewById<Button>(R.id.btn_save_habit)
+        // Configurar iconos de la status bar en color claro
+        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+        insetsController.isAppearanceLightStatusBars = false
 
-        viewModel.addState.observe(this, Observer { state ->
-            if (state.error != null) {
-                Toast.makeText(this, state.error, Toast.LENGTH_SHORT).show()
-            } else if (state.success) {
-                val rootView = window.decorView.findViewById(android.R.id.content) as android.view.View
-                val snackbar = Snackbar.make(rootView, getString(R.string.habit_added_popup), Snackbar.LENGTH_INDEFINITE)
-                snackbar.setAction(getString(R.string.close)) {
-                    snackbar.dismiss()
-                    finish()
+        // Configurar header
+        val header = findViewById<View>(R.id.header_add_habit)
+        val headerTitle = header.findViewById<TextView>(R.id.tv_header_title)
+        val headerSubtitle = header.findViewById<TextView>(R.id.tv_header_subtitle)
+
+        ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            v.setPadding(v.paddingLeft, statusBarHeight + 24, v.paddingRight, v.paddingBottom)
+            insets
+        }
+
+        // Verificar modo edición
+        editingHabitId = intent.getIntExtra("habit_id", -1)
+        isEditMode = editingHabitId != -1
+
+        headerTitle.text = if (isEditMode) "Editar Hábito" else "Nuevo Hábito"
+        headerSubtitle.text = if (isEditMode) "Modifica los datos del hábito" else "Completa los datos del hábito"
+
+        viewModel = ViewModelProvider(this)[HabitsViewModel::class.java]
+
+        val etName = findViewById<TextInputEditText>(R.id.et_habit_name)
+        val etDescription = findViewById<TextInputEditText>(R.id.et_habit_description)
+        val etFrequency = findViewById<TextInputEditText>(R.id.et_habit_frequency)
+        val btnSave = findViewById<Button>(R.id.btn_save_habit)
+        val btnCancel = findViewById<Button>(R.id.btn_cancel_habit)
+
+        // Si es modo edición, cargar datos
+        if (isEditMode) {
+            viewModel.selectHabit(editingHabitId)
+            viewModel.selectedHabit.observe(this) { habit ->
+                habit?.let {
+                    etName.setText(it.Nombre)
+                    etDescription.setText(it.Descripcion)
+                    etFrequency.setText(it.Frecuencia)
                 }
-                snackbar.setDuration(10_000)
-                snackbar.show()
-                Handler(Looper.getMainLooper()).postDelayed({
-                    snackbar.dismiss()
-                    finish()
-                }, 10_000)
             }
-        })
+            btnSave.text = "Actualizar Hábito"
+        }
 
-        saveBtn.setOnClickListener {
-            val name = nameInput.text?.toString()?.trim().orEmpty()
-            val desc = descInput.text?.toString()?.trim().orEmpty()
-            viewModel.addHabit(name, desc)
+        btnSave.setOnClickListener {
+            val name = etName.text.toString().trim()
+            val description = etDescription.text.toString().trim()
+            val frequency = etFrequency.text.toString().trim().ifEmpty { "Diario" }
+
+            if (name.isEmpty()) {
+                Toast.makeText(this, "El nombre es obligatorio", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (isEditMode) {
+                viewModel.updateHabit(editingHabitId, name, description, frequency)
+                Toast.makeText(this, "Hábito actualizado exitosamente", Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.addHabit(name, description, frequency)
+                Toast.makeText(this, "Hábito creado exitosamente", Toast.LENGTH_SHORT).show()
+            }
+            finish()
+        }
+
+        btnCancel.setOnClickListener {
+            finish()
         }
     }
 }
+

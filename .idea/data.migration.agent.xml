@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AgentMigrationStateService">
+    <option name="pendingSessionIds">
+      <option value="3ac3c746-d310-4821-88c1-7ea9607441c9" />
+    </option>
+    <option name="pendingTurns">
+      <map>
+        <entry key="3ac3c746-d310-4821-88c1-7ea9607441c9">
+          <value>
+            <set>
+              <option value="1d42d27a-00a5-4c10-b894-a1d7aefaed50" />
+              <option value="ac15614f-4f3f-4230-8663-6075efce44e9" />
+              <option value="3dd2e388-4774-423b-85f1-8fbd0bc4ae0e" />
+              <option value="4717e5ad-fbdd-4807-9a81-8af051e276ec" />
+              <option value="60fb2ac3-14fb-4bb3-a18e-2e1b38b6b4ec" />
+              <option value="fc5c6ec7-211c-4b9c-b211-0866a2649b25" />
+              <option value="2b95bf3e-3228-4740-989a-73dedf16e59e" />
+            </set>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <pendingWorkingSetItems>
+      <entry key="3ac3c746-d310-4821-88c1-7ea9607441c9">
+        <set>
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/HabitsAdapter.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_habits.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/HabitsFragment.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/TasksFragment.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/item_habit.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/model/Habito.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/HabitsViewModel.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/activity_add_habit.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/activity_habit_detail.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/AddHabitActivity.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/HabitDetailActivity.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/TaskDetailActivity.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/StatsFragment.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/SettingsFragment.kt" />
+        </set>
+      </entry>
+    </pendingWorkingSetItems>
+  </component>
+</project>

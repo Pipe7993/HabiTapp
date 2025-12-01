@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -23,8 +25,28 @@ class HabitsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Configurar header
+        val header = view.findViewById<View>(R.id.header_habits)
+        val headerTitle = header.findViewById<TextView>(R.id.tv_header_title)
+        val headerSubtitle = header.findViewById<TextView>(R.id.tv_header_subtitle)
+
+        // Ajustar padding superior del header para que cubra la status bar
+        ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            v.setPadding(
+                v.paddingLeft,
+                statusBarHeight + 24, // 24dp adicionales después de la status bar
+                v.paddingRight,
+                v.paddingBottom
+            )
+            insets
+        }
+
+        headerTitle.text = "Mis Hábitos"
+        headerSubtitle.text = "4 hábitos activos"
+
         val recycler = view.findViewById<RecyclerView>(R.id.recycler_habits)
-        val btnAdd = view.findViewById<Button>(R.id.btn_add_habit)
 
         val adapter = HabitsAdapter { habit ->
             val detailIntent = Intent(requireContext(), HabitDetailActivity::class.java)
@@ -34,15 +56,21 @@ class HabitsFragment : Fragment() {
         recycler.layoutManager = LinearLayoutManager(requireContext())
         recycler.adapter = adapter
 
-        viewModel.habits.observe(viewLifecycleOwner, Observer { lista ->
-            adapter.submitList(lista)
-        })
-
-        btnAdd.setOnClickListener {
+        // FAB para agregar hábito
+        val fab = view.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fab_add_habit)
+        fab.setOnClickListener {
             startActivity(Intent(requireContext(), AddHabitActivity::class.java))
         }
+
+        viewModel.habits.observe(viewLifecycleOwner, Observer { lista ->
+            adapter.submitList(lista)
+            // Actualizar subtítulo del header con el número de hábitos
+            headerSubtitle.text = "${lista.size} hábitos activos"
+        })
     }
 }
+
+// ...existing code...
 
 private class HabitsAdapter(
     val onClick: (Habito) -> Unit
@@ -73,8 +101,18 @@ private class HabitViewHolder(
     fun bind(habit: Habito) {
         val name = itemView.findViewById<android.widget.TextView>(R.id.text_habit_name)
         val desc = itemView.findViewById<android.widget.TextView>(R.id.text_habit_desc)
+        val status = itemView.findViewById<android.widget.TextView>(R.id.text_habit_status)
+        val frequency = itemView.findViewById<android.widget.TextView>(R.id.text_habit_frequency)
+        val progress = itemView.findViewById<android.widget.ProgressBar>(R.id.progress_habit)
+        val progressText = itemView.findViewById<android.widget.TextView>(R.id.text_habit_progress)
+
         name.text = habit.Nombre
         desc.text = habit.Descripcion
+        status.text = if (habit.Activo) "Activo" else "Inactivo"
+        frequency.text = habit.Frecuencia
+        progress.progress = habit.Progreso
+        progressText.text = "${habit.Progreso}%"
+
         itemView.setOnClickListener { onClick(habit) }
     }
 }
