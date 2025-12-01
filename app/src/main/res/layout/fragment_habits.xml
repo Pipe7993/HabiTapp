@@ -2,22 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_habits_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/title_habits"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
+    <include
+        android:id="@+id/header_habits"
+        layout="@layout/header_purple" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_habits"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tv_habits_subheader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mis Hábitos"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add_habit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginBottom="8dp"
+            android:src="@android:drawable/ic_input_add"
+            android:contentDescription="Agregar hábito" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_habits"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 
 </LinearLayout>

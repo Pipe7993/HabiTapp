@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import com.example.habitapp.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -24,14 +25,17 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        // Ajustar insets dinámicamente para que la UI no quede tapada por status/navigation bars
+        // Configurar iconos de la status bar en color claro (para que se vean sobre el fondo morado)
+        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+        insetsController.isAppearanceLightStatusBars = false // iconos claros
+
+        // Ajustar insets dinámicamente para que la UI no quede tapada por navigation bar
         val container = findViewById<View>(R.id.fragment_contenedor)
         val barraNavegacion = findViewById<BottomNavigationView>(R.id.barra_navegacion)
 
+        // El contenedor ya no necesita padding superior, solo dejar que los fragments manejen los insets
         ViewCompat.setOnApplyWindowInsetsListener(container) { v, insets ->
-            val sysBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            // Aplicar padding top + bottom al contenedor para que el contenido quede visible
-            v.setPadding(0, sysBars.top, 0, sysBars.bottom)
+            // No aplicar padding, dejar que cada fragment maneje su header
             insets
         }
 
