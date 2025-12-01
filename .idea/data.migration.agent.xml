@@ -19,6 +19,13 @@
               <option value="34026a6f-9372-4af4-81f5-31d28aebb567" />
               <option value="fc450ddb-52d2-4c05-868a-616aa0ca8a07" />
               <option value="2a570ef6-0581-4339-ae92-4251570d4f8f" />
+              <option value="ec6dcf70-3f57-446b-bdf8-ef80e121a652" />
+              <option value="4de95c65-66e9-4b29-ab07-bb762a83e377" />
+              <option value="4a749fa7-e703-43bf-a570-d164ca8e3c94" />
+              <option value="73e9b598-8bba-4f3e-b580-3ec4d1034cb9" />
+              <option value="2a283381-258c-4439-ba9d-470687cafdf6" />
+              <option value="00dea780-1f7d-403d-997e-aa64c719820a" />
+              <option value="2e985b0f-d127-481f-9747-410be34213f1" />
             </set>
           </value>
         </entry>
@@ -66,6 +73,13 @@
           <option value="file://$PROJECT_DIR$/docs/resumen_implementacion.md" />
           <option value="file://$PROJECT_DIR$/.idea/copilotDiffState.xml" />
           <option value="file://$PROJECT_DIR$/.gitignore" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/activity_add_task.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/activity_task_detail.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/AddTaskActivity.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/TaskDetailActivity.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/viewmodel/TasksViewModel.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
         </set>
       </entry>
       <entry key="c24c9bb8-5783-48c2-9295-8001cc29b1f1" />

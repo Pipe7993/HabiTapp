@@ -12,10 +12,10 @@ class TasksViewModel : ViewModel() {
 
     init {
         _tasks.value = listOf(
-            Task(1, "Reunión de equipo", "Revisar avances del proyecto", "10:00", "Media", true),
-            Task(2, "Terminar propuesta proyecto", "Completar documento final", "14:00", "Alta", false),
-            Task(3, "Compras del supermercado", "Lista de compras semanal", "17:00", "Baja", false),
-            Task(4, "Ir al gimnasio", "Rutina de piernas", "19:00", "Media", false)
+            Task(1, "Reunión de equipo", "Revisar avances del proyecto", "30/11/2025", "Media", true),
+            Task(2, "Terminar propuesta proyecto", "Completar documento final", "01/12/2025", "Alta", false),
+            Task(3, "Compras del supermercado", "Lista de compras semanal", "02/12/2025", "Baja", false),
+            Task(4, "Ir al gimnasio", "Rutina de piernas", "30/11/2025", "Media", false)
         )
     }
 
@@ -25,6 +25,21 @@ class TasksViewModel : ViewModel() {
 
     fun addTask(task: Task) {
         _tasks.value = _tasks.value.orEmpty() + task
+    }
+
+    fun updateTask(id: Long, title: String, subtitle: String, time: String, priority: String) {
+        _tasks.value = _tasks.value.orEmpty().map {
+            if (it.id == id) {
+                it.copy(
+                    title = title,
+                    subtitle = subtitle,
+                    time = time,
+                    priority = priority
+                )
+            } else {
+                it
+            }
+        }
     }
 
     fun removeTask(id: Long) {

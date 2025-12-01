@@ -49,8 +49,10 @@ class TasksFragment : Fragment() {
 
         val rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_tasks)
         adapter = TasksAdapter { item ->
-            // Al hacer click, togglear estado done
-            viewModel.toggleDone(item.id)
+            // Al hacer click, abrir detalle de tarea
+            val intent = android.content.Intent(requireContext(), TaskDetailActivity::class.java)
+            intent.putExtra("TASK_ID", item.id)
+            startActivity(intent)
         }
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = adapter
@@ -58,7 +60,8 @@ class TasksFragment : Fragment() {
         // FAB para agregar tarea
         val fab = view.findViewById<FloatingActionButton>(R.id.fab_add_task)
         fab.setOnClickListener {
-            // TODO: Abrir diálogo o actividad para agregar tarea
+            val intent = android.content.Intent(requireContext(), AddTaskActivity::class.java)
+            startActivity(intent)
         }
 
         // Observar LiveData

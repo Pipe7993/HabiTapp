@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.habitapp.R
 import com.example.habitapp.viewmodel.HabitsViewModel
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HabitsFragment : Fragment() {
     private lateinit var adapter: HabitsAdapter
@@ -50,12 +49,6 @@ class HabitsFragment : Fragment() {
         }
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = adapter
-
-        // FAB para agregar hábito
-        val fab = view.findViewById<FloatingActionButton>(R.id.fab_add_habit)
-        fab.setOnClickListener {
-            // TODO: Abrir diálogo o actividad para agregar hábito
-        }
 
         // Observar LiveData del ViewModel
         viewModel.habits.observe(viewLifecycleOwner) { list ->
