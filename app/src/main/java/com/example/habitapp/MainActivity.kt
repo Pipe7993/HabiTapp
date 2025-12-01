@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import com.example.habitapp.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -20,33 +19,30 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Edge-to-edge: permitir que el contenido ocupe toda la pantalla
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContentView(R.layout.activity_main)
 
-        // Configurar iconos de la status bar en color claro (para que se vean sobre el fondo morado)
-        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
-        insetsController.isAppearanceLightStatusBars = false // iconos claros
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = false
+        }
 
-        // Ajustar insets dinámicamente para que la UI no quede tapada por navigation bar
         val container = findViewById<View>(R.id.fragment_contenedor)
         val barraNavegacion = findViewById<BottomNavigationView>(R.id.barra_navegacion)
 
-        // El contenedor ya no necesita padding superior, solo dejar que los fragments manejen los insets
         ViewCompat.setOnApplyWindowInsetsListener(container) { v, insets ->
-            // No aplicar padding, dejar que cada fragment maneje su header
+            val sysBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(0, sysBars.top, 0, sysBars.bottom)
             insets
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(barraNavegacion) { v, insets ->
             val navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
-            // Asegurar padding inferior para la barra de navegación
             v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, navBars.bottom)
             insets
         }
 
-        // Mostrar fragmento por defecto
         mostrarFragmento(fragmentHabitos)
 
         barraNavegacion.setOnItemSelectedListener { item ->

@@ -1,6 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="EditMigrationStateService">
-    <option name="migrationStatus" value="COMPLETED" />
+  <component name="AgentMigrationStateService">
+<<<<<<<< HEAD:.idea/data.migration.agent.xml
+    <option name="migrationStatus" value="IN_PROGRESS" />
+    <option name="pendingSessionIds">
+      <option value="3ac3c746-d310-4821-88c1-7ea9607441c9" />
+========
+    <option name="pendingSessionIds">
+>>>>>>>> 519c546aef5671ad15dacb34893d7d5abbcbb17e:.idea/data.migration.xml
+      <option value="7604c508-3fe4-46d0-a00c-4d8adf5ab2ea" />
+      <option value="c24c9bb8-5783-48c2-9295-8001cc29b1f1" />
+    </option>
+    <option name="pendingTurns">
+      <map>
+<<<<<<<< HEAD:.idea/data.migration.agent.xml
+        <entry key="3ac3c746-d310-4821-88c1-7ea9607441c9">
+          <value>
+            <set>
+              <option value="02ce1107-e89b-4a25-ad88-758dddebd656" />
+              <option value="687bd62d-73a0-47cd-aca3-1ff3b893c50a" />
+              <option value="5ed66cac-d48e-4449-9ef7-14d09a954c4b" />
+              <option value="d6dd1a42-68b5-4ec9-b5cd-bd5c857d40c3" />
+              <option value="34026a6f-9372-4af4-81f5-31d28aebb567" />
+              <option value="fc450ddb-52d2-4c05-868a-616aa0ca8a07" />
+              <option value="2a570ef6-0581-4339-ae92-4251570d4f8f" />
+              <option value="ec6dcf70-3f57-446b-bdf8-ef80e121a652" />
+              <option value="4de95c65-66e9-4b29-ab07-bb762a83e377" />
+              <option value="4a749fa7-e703-43bf-a570-d164ca8e3c94" />
+              <option value="73e9b598-8bba-4f3e-b580-3ec4d1034cb9" />
+              <option value="2a283381-258c-4439-ba9d-470687cafdf6" />
+              <option value="00dea780-1f7d-403d-997e-aa64c719820a" />
+              <option value="2e985b0f-d127-481f-9747-410be34213f1" />
+            </set>
+          </value>
+        </entry>
+========
+>>>>>>>> 519c546aef5671ad15dacb34893d7d5abbcbb17e:.idea/data.migration.xml
+        <entry key="7604c508-3fe4-46d0-a00c-4d8adf5ab2ea">
+          <value>
+            <set>
+              <option value="12ebbb84-6390-4395-9a29-1ad0c63b81a7" />
+            </set>
+          </value>
+        </entry>
+        <entry key="c24c9bb8-5783-48c2-9295-8001cc29b1f1">
+          <value>
+            <set>
+<<<<<<<< HEAD:.idea/data.migration.agent.xml
+              <option value="0999c824-5fe8-478e-aec9-8321c9d1deb5" />
+              <option value="0b71c5e3-d982-4486-aed4-a56420297ed1" />
+              <option value="1f9f938d-3b89-4ed9-8eb1-8b74fdb7460e" />
+              <option value="22fe0d9c-200d-4a73-9ed8-587b91b10e12" />
+              <option value="81dbc791-a1d5-4d9d-83b9-701dbeb7d5dd" />
+              <option value="b740d6c9-64ad-49a2-bde0-bedee39b04d2" />
+              <option value="c0ff3791-6774-4358-bf35-3cfdaf2da810" />
+              <option value="d14e11b8-5b4e-46ed-8b9c-738303b9ab1d" />
+              <option value="ddcf57fe-81d2-43f3-bd3f-1442468193a7" />
+              <option value="e37546c3-a936-4b3f-803d-6dcf3ec7a288" />
+              <option value="eedef7d8-88f2-4bb8-9438-60ebec93dcf8" />
+========
+              <option value="1f9f938d-3b89-4ed9-8eb1-8b74fdb7460e" />
+              <option value="d14e11b8-5b4e-46ed-8b9c-738303b9ab1d" />
+              <option value="81dbc791-a1d5-4d9d-83b9-701dbeb7d5dd" />
+              <option value="e37546c3-a936-4b3f-803d-6dcf3ec7a288" />
+              <option value="0999c824-5fe8-478e-aec9-8321c9d1deb5" />
+              <option value="eedef7d8-88f2-4bb8-9438-60ebec93dcf8" />
+              <option value="c0ff3791-6774-4358-bf35-3cfdaf2da810" />
+              <option value="0b71c5e3-d982-4486-aed4-a56420297ed1" />
+>>>>>>>> 519c546aef5671ad15dacb34893d7d5abbcbb17e:.idea/data.migration.xml
+            </set>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <pendingWorkingSetItems>
+<<<<<<<< HEAD:.idea/data.migration.agent.xml
+      <entry key="3ac3c746-d310-4821-88c1-7ea9607441c9">
+        <set>
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/header_purple.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/drawable/header_purple_gradient.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_tasks.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_stats.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_settings.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/TasksFragment.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/StatsFragment.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/SettingsFragment.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_habits.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/HabitsFragment.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/MainActivity.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/values/themes.xml" />
+          <option value="file://$PROJECT_DIR$/docs/resumen_implementacion.md" />
+          <option value="file://$PROJECT_DIR$/.idea/copilotDiffState.xml" />
+          <option value="file://$PROJECT_DIR$/.gitignore" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/activity_add_task.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/activity_task_detail.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/AddTaskActivity.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/TaskDetailActivity.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/viewmodel/TasksViewModel.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
+        </set>
+      </entry>
+      <entry key="c24c9bb8-5783-48c2-9295-8001cc29b1f1" />
+========
+      <entry key="c24c9bb8-5783-48c2-9295-8001cc29b1f1">
+        <set>
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/item_task.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/drawable/bg_tag_orange.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/item_habit.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_tasks.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/drawable/bg_tag_blue.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/drawable/bg_tag_red.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/drawable/bg_tag_green.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/TasksAdapter.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/HabitsAdapter.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/HabitsFragment.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/TasksFragment.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/stat_small_box.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_stats.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_habits.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/viewmodel/HabitsViewModel.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/viewmodel/TasksViewModel.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/viewmodel/StatsViewModel.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/viewmodel/SettingsViewModel.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_settings.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/StatsFragment.kt" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/habitapp/ui/SettingsFragment.kt" />
+        </set>
+      </entry>
+>>>>>>>> 519c546aef5671ad15dacb34893d7d5abbcbb17e:.idea/data.migration.xml
+    </pendingWorkingSetItems>
   </component>
 </project>

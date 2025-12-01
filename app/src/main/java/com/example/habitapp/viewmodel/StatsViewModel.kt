@@ -11,7 +11,7 @@ class StatsViewModel : ViewModel() {
     val stats: LiveData<StatsData> = _stats
 
     fun refresh() {
-        // recalcular en una implementación real
+       
     }
 }
 

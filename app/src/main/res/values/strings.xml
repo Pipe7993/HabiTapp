@@ -10,6 +10,8 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+
+    <!-- De HEAD -->
     <string name="add_item">Agregar</string>
     <string name="title_habits">Hábitos</string>
     <string name="title_tasks">Tareas</string>
@@ -19,4 +21,8 @@
     <string name="habit_sub_sample">Descripción breve</string>
     <string name="stat_label_sample">Tareas completadas</string>
     <string name="stat_value_sample">12</string>
+    <string name="add_habit">Añadir hábito</string>
+    <string name="habit_added_success">Hábito añadido</string>
+    <string name="habit_added_popup">Wena, creaste un habito 🎉</string>
+    <string name="close">Cerrar</string>
 </resources>

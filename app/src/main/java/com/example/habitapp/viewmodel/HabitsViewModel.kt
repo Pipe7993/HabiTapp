@@ -11,7 +11,6 @@ class HabitsViewModel : ViewModel() {
     val habits: LiveData<List<Habit>> = _habits
 
     init {
-        // datos de ejemplo
         _habits.value = listOf(
             Habit(1, "Meditación matutina", "Meditar 10 minutos cada mañana", 85),
             Habit(2, "Beber agua", "8 vasos de agua al día", 62),

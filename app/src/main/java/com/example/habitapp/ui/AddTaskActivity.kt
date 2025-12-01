@@ -142,7 +142,6 @@ class AddTaskActivity : AppCompatActivity() {
         }
     }
 
-    // Abre un DatePickerDialog. Si 'initial' tiene una fecha válida en dd/MM/yyyy, la usa como fecha inicial.
     private fun showDatePicker(initial: String?) {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale("es", "ES"))
         val cal = Calendar.getInstance()

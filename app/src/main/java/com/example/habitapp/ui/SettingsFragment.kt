@@ -18,17 +18,15 @@ class SettingsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
 
-        // Configurar header
         val header = view.findViewById<View>(R.id.header_settings)
         val headerTitle = header.findViewById<TextView>(R.id.tv_header_title)
         val headerSubtitle = header.findViewById<TextView>(R.id.tv_header_subtitle)
 
-        // Ajustar padding superior del header para que cubra la status bar
         ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
             val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
             v.setPadding(
                 v.paddingLeft,
-                statusBarHeight + 24, // 24dp adicionales después de la status bar
+                statusBarHeight + 24,
                 v.paddingRight,
                 v.paddingBottom
             )

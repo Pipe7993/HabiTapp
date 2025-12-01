@@ -1,5 +1,6 @@
 package com.example.habitapp.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,17 +25,15 @@ class TasksFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_tasks, container, false)
 
-        // Configurar header
         val header = view.findViewById<View>(R.id.header_tasks)
         val headerTitle = header.findViewById<TextView>(R.id.tv_header_title)
         val headerSubtitle = header.findViewById<TextView>(R.id.tv_header_subtitle)
 
-        // Ajustar padding superior del header para que cubra la status bar
         ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
             val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
             v.setPadding(
                 v.paddingLeft,
-                statusBarHeight + 24, // 24dp adicionales después de la status bar
+                statusBarHeight + 24,
                 v.paddingRight,
                 v.paddingBottom
             )
@@ -49,22 +48,19 @@ class TasksFragment : Fragment() {
 
         val rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_tasks)
         adapter = TasksAdapter { item ->
-            // Al hacer click, abrir detalle de tarea
-            val intent = android.content.Intent(requireContext(), TaskDetailActivity::class.java)
+            val intent = Intent(requireContext(), TaskDetailActivity::class.java)
             intent.putExtra("TASK_ID", item.id)
             startActivity(intent)
         }
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = adapter
 
-        // FAB para agregar tarea
         val fab = view.findViewById<FloatingActionButton>(R.id.fab_add_task)
         fab.setOnClickListener {
-            val intent = android.content.Intent(requireContext(), AddTaskActivity::class.java)
+            val intent = Intent(requireContext(), AddTaskActivity::class.java)
             startActivity(intent)
         }
 
-        // Observar LiveData
         viewModel.tasks.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
         }

@@ -20,20 +20,16 @@ class TaskDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Edge-to-edge
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(R.layout.activity_task_detail)
 
-        // Configurar iconos de la status bar en color claro
         val insetsController = WindowCompat.getInsetsController(window, window.decorView)
         insetsController.isAppearanceLightStatusBars = false
 
-        // Configurar header
         val header = findViewById<View>(R.id.header_task_detail)
         val headerTitle = header.findViewById<TextView>(R.id.tv_header_title)
         val headerSubtitle = header.findViewById<TextView>(R.id.tv_header_subtitle)
 
-        // Ajustar padding del header
         ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
             val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
             v.setPadding(
@@ -50,10 +46,8 @@ class TaskDetailActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[TasksViewModel::class.java]
 
-        // Obtener ID de la tarea desde el Intent
         taskId = intent.getLongExtra("TASK_ID", -1)
 
-        // Referencias a las vistas
         val tvTitle = findViewById<TextView>(R.id.tv_detail_task_title)
         val tvDescription = findViewById<TextView>(R.id.tv_detail_task_description)
         val tvTime = findViewById<TextView>(R.id.tv_detail_task_time)
@@ -62,7 +56,6 @@ class TaskDetailActivity : AppCompatActivity() {
         val btnDelete = findViewById<Button>(R.id.btn_delete_task)
         val btnBack = findViewById<Button>(R.id.btn_back_to_tasks)
 
-        // Observar las tareas y buscar la actual
         viewModel.tasks.observe(this) { tasks ->
             val task = tasks.find { it.id == taskId }
             if (task != null) {
@@ -71,7 +64,6 @@ class TaskDetailActivity : AppCompatActivity() {
                 tvTime.text = task.time
                 tvPriority.text = task.priority
 
-                // Aplicar color según prioridad
                 when (task.priority.lowercase()) {
                     "alta" -> tvPriority.setBackgroundResource(R.drawable.bg_tag_red)
                     "media" -> tvPriority.setBackgroundResource(R.drawable.bg_tag_orange)
