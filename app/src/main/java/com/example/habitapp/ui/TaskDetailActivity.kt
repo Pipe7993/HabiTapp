@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.habitapp.R
 import com.example.habitapp.viewmodel.TasksViewModel
@@ -23,6 +24,9 @@ class TaskDetailActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(R.layout.activity_task_detail)
 
+        // Make the status bar use the same purple as the header so the header appears to reach the top
+        window.statusBarColor = ContextCompat.getColor(this, R.color.purple_700)
+
         val insetsController = WindowCompat.getInsetsController(window, window.decorView)
         insetsController.isAppearanceLightStatusBars = false
 
@@ -32,17 +36,21 @@ class TaskDetailActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
             val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            // Convert 24dp to pixels to avoid mixing dp and px
+            val extraTop = (24 * resources.displayMetrics.density).toInt()
             v.setPadding(
                 v.paddingLeft,
-                statusBarHeight + 24,
+                statusBarHeight + extraTop,
                 v.paddingRight,
                 v.paddingBottom
             )
             insets
         }
 
-        headerTitle.text = "Detalle de Tarea"
-        headerSubtitle.text = "Información completa"
+        // headerTitle.text = "Detalle de Tarea"
+        // headerSubtitle.text = "Información completa"
+        headerTitle.text = getString(R.string.task_detail_title)
+        headerSubtitle.text = getString(R.string.task_detail_subtitle)
 
         viewModel = ViewModelProvider(this)[TasksViewModel::class.java]
 
@@ -99,4 +107,3 @@ class TaskDetailActivity : AppCompatActivity() {
         }
     }
 }
-

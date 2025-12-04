@@ -11,13 +11,18 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Ensure the window draws system bar backgrounds so statusBarColor is used -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.Habitapp.NoActionBar">
+    <!-- NoActionBar should reuse the main theme but disable the action bar -->
+    <style name="Theme.Habitapp.NoActionBar" parent="Theme.Habitapp">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!-- Keep status bar color consistent with the main theme -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
     </style>
 
     <style name="Theme.Habitapp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

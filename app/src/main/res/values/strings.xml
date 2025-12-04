@@ -25,4 +25,24 @@
     <string name="habit_added_success">Hábito añadido</string>
     <string name="habit_added_popup">Wena, creaste un habito 🎉</string>
     <string name="close">Cerrar</string>
+
+    <!-- Task detail header strings -->
+    <string name="task_detail_title">Detalle de Tarea</string>
+    <string name="task_detail_subtitle">Información completa</string>
+
+    <!-- Habit detail header strings -->
+    <string name="habit_detail_title">Detalle de Hábito</string>
+    <string name="habit_detail_subtitle">Información completa</string>
+
+    <!-- Add/Edit Task header strings -->
+    <string name="add_task_title">Nueva Tarea</string>
+    <string name="add_task_subtitle">Completa los datos de la tarea</string>
+    <string name="edit_task_title">Editar Tarea</string>
+    <string name="edit_task_subtitle">Modifica los datos de la tarea</string>
+
+    <!-- Add/Edit Habit header strings -->
+    <string name="add_habit_title">Nuevo Hábito</string>
+    <string name="add_habit_subtitle">Completa los datos del hábito</string>
+    <string name="edit_habit_title">Editar Hábito</string>
+    <string name="edit_habit_subtitle">Modifica los datos del hábito</string>
 </resources>

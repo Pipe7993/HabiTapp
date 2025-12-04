@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.habitapp.R
 
@@ -24,6 +25,9 @@ class HabitDetailActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(R.layout.activity_habit_detail)
 
+        // Make the status bar use the same purple as the header
+        window.statusBarColor = ContextCompat.getColor(this, R.color.purple_700)
+
         // Configurar iconos de la status bar en color claro
         val insetsController = WindowCompat.getInsetsController(window, window.decorView)
         insetsController.isAppearanceLightStatusBars = false
@@ -35,12 +39,13 @@ class HabitDetailActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
             val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            v.setPadding(v.paddingLeft, statusBarHeight + 24, v.paddingRight, v.paddingBottom)
+            val extraTop = (24 * resources.displayMetrics.density).toInt()
+            v.setPadding(v.paddingLeft, statusBarHeight + extraTop, v.paddingRight, v.paddingBottom)
             insets
         }
 
-        headerTitle.text = "Detalle de Hábito"
-        headerSubtitle.text = "Información completa"
+        headerTitle.text = getString(R.string.habit_detail_title)
+        headerSubtitle.text = getString(R.string.habit_detail_subtitle)
 
         viewModel = ViewModelProvider(this)[HabitsViewModel::class.java]
 
@@ -96,4 +101,3 @@ class HabitDetailActivity : AppCompatActivity() {
         }
     }
 }
-

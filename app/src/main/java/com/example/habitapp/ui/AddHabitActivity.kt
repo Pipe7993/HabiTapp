@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.habitapp.R
 import com.google.android.material.textfield.TextInputEditText
@@ -23,6 +24,9 @@ class AddHabitActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(R.layout.activity_add_habit)
 
+        // Make the status bar use the same purple as the header
+        window.statusBarColor = ContextCompat.getColor(this, R.color.purple_700)
+
         // Configurar iconos de la status bar en color claro
         val insetsController = WindowCompat.getInsetsController(window, window.decorView)
         insetsController.isAppearanceLightStatusBars = false
@@ -34,7 +38,8 @@ class AddHabitActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
             val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            v.setPadding(v.paddingLeft, statusBarHeight + 24, v.paddingRight, v.paddingBottom)
+            val extraTop = (24 * resources.displayMetrics.density).toInt()
+            v.setPadding(v.paddingLeft, statusBarHeight + extraTop, v.paddingRight, v.paddingBottom)
             insets
         }
 
@@ -42,8 +47,8 @@ class AddHabitActivity : AppCompatActivity() {
         editingHabitId = intent.getIntExtra("habit_id", -1)
         isEditMode = editingHabitId != -1
 
-        headerTitle.text = if (isEditMode) "Editar Hábito" else "Nuevo Hábito"
-        headerSubtitle.text = if (isEditMode) "Modifica los datos del hábito" else "Completa los datos del hábito"
+        headerTitle.text = if (isEditMode) getString(R.string.edit_habit_title) else getString(R.string.add_habit_title)
+        headerSubtitle.text = if (isEditMode) getString(R.string.edit_habit_subtitle) else getString(R.string.add_habit_subtitle)
 
         viewModel = ViewModelProvider(this)[HabitsViewModel::class.java]
 
@@ -91,4 +96,3 @@ class AddHabitActivity : AppCompatActivity() {
         }
     }
 }
-
