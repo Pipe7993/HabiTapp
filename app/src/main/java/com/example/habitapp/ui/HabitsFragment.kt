@@ -34,9 +34,11 @@ class HabitsFragment : Fragment() {
         // Ajustar padding superior del header para que cubra la status bar
         ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
             val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            // Convert 24dp to pixels
+            val extraTop = (24 * resources.displayMetrics.density).toInt()
             v.setPadding(
                 v.paddingLeft,
-                statusBarHeight + 24, // 24dp adicionales después de la status bar
+                statusBarHeight + extraTop,
                 v.paddingRight,
                 v.paddingBottom
             )
@@ -69,8 +71,6 @@ class HabitsFragment : Fragment() {
         })
     }
 }
-
-// ...existing code...
 
 private class HabitsAdapter(
     val onClick: (Habito) -> Unit

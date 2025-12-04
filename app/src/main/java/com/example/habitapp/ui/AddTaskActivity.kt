@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.habitapp.R
 import com.example.habitapp.viewmodel.Task
@@ -31,6 +32,9 @@ class AddTaskActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(R.layout.activity_add_task)
 
+        // Make the status bar use the same purple as the header
+        window.statusBarColor = ContextCompat.getColor(this, R.color.purple_700)
+
         // Configurar iconos de la status bar en color claro
         val insetsController = WindowCompat.getInsetsController(window, window.decorView)
         insetsController.isAppearanceLightStatusBars = false
@@ -43,9 +47,10 @@ class AddTaskActivity : AppCompatActivity() {
         // Ajustar padding del header
         ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
             val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            val extraTop = (24 * resources.displayMetrics.density).toInt()
             v.setPadding(
                 v.paddingLeft,
-                statusBarHeight + 24,
+                statusBarHeight + extraTop,
                 v.paddingRight,
                 v.paddingBottom
             )
@@ -56,8 +61,8 @@ class AddTaskActivity : AppCompatActivity() {
         editingTaskId = intent.getLongExtra("TASK_ID", -1L)
         isEditMode = editingTaskId != -1L
 
-        headerTitle.text = if (isEditMode) "Editar Tarea" else "Nueva Tarea"
-        headerSubtitle.text = if (isEditMode) "Modifica los datos de la tarea" else "Completa los datos de la tarea"
+        headerTitle.text = if (isEditMode) getString(R.string.edit_task_title) else getString(R.string.add_task_title)
+        headerSubtitle.text = if (isEditMode) getString(R.string.edit_task_subtitle) else getString(R.string.add_task_subtitle)
 
         viewModel = ViewModelProvider(this)[TasksViewModel::class.java]
 

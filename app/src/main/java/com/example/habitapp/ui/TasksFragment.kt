@@ -31,9 +31,11 @@ class TasksFragment : Fragment() {
 
         ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
             val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            // Convert 24dp to pixels
+            val extraTop = (24 * resources.displayMetrics.density).toInt()
             v.setPadding(
                 v.paddingLeft,
-                statusBarHeight + 24,
+                statusBarHeight + extraTop,
                 v.paddingRight,
                 v.paddingBottom
             )
