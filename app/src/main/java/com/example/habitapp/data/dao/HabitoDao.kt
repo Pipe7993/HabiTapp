@@ -35,4 +35,10 @@ interface HabitoDao {
 
     @Query("SELECT * FROM habito WHERE tipo = :tipo")
     fun getHabitosPorTipo(tipo: TipoHabito): Flow<List<Habito>>
+
+    @Query("SELECT * FROM habito WHERE completado = 1 AND fechaCreacion >= :inicio AND fechaCreacion <= :fin")
+    fun getCompletadosEnRango(inicio: Long, fin: Long): Flow<List<Habito>>
+
+    @Query("SELECT * FROM habito WHERE completado = 0")
+    fun getActivos(): Flow<List<Habito>>
 }

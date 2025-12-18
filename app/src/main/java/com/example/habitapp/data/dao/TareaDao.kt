@@ -39,4 +39,13 @@ interface TareaDao {
 
     @Query("SELECT * FROM tarea WHERE prioridad = :prioridad")
     fun getPorPrioridad(prioridad: Prioridad): Flow<List<Tarea>>
+
+    @Query("SELECT * FROM tarea WHERE estado = :estado AND fechaLimite >= :inicio AND fechaLimite <= :fin")
+    fun getCompletadasEnRango(estado: EstadoTarea, inicio: Long, fin: Long): Flow<List<Tarea>>
+
+    @Query("SELECT * FROM tarea WHERE estado = :estado")
+    fun getPorEstado(estado: EstadoTarea): Flow<List<Tarea>>
+
+    @Query("SELECT * FROM tarea WHERE estado = :estado AND date(fechaLimite/1000, 'unixepoch', 'localtime') = date('now', 'localtime')")
+    fun getParaHoy(estado: EstadoTarea): Flow<List<Tarea>>
 }

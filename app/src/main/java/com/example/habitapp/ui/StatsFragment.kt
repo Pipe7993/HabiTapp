@@ -9,8 +9,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.habitapp.R
 import com.example.habitapp.viewmodel.StatsViewModel
+import com.example.habitapp.viewmodel.TareaRoomViewModel
+import com.example.habitapp.viewmodel.HabitoRoomViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class StatsFragment : Fragment() {
     private lateinit var viewModel: StatsViewModel
@@ -36,25 +42,51 @@ class StatsFragment : Fragment() {
         }
 
         headerTitle.text = "Estadísticas"
-        headerSubtitle.text = "Tu progreso esta semana"
+        headerSubtitle.text = "Tu progreso"
 
         viewModel = ViewModelProvider(requireActivity())[StatsViewModel::class.java]
 
-        val box1 = view.findViewById<View>(R.id.stat_box_1)
-        val box2 = view.findViewById<View>(R.id.stat_box_2)
-        val box3 = view.findViewById<View>(R.id.stat_box_3)
-        val box4 = view.findViewById<View>(R.id.stat_box_4)
 
-        val box1Value = box1.findViewById<TextView>(R.id.tv_stat_value)
-        val box2Value = box2.findViewById<TextView>(R.id.tv_stat_value)
-        val box3Value = box3.findViewById<TextView>(R.id.tv_stat_value)
-        val box4Value = box4.findViewById<TextView>(R.id.tv_stat_value)
+        // Tareas completadas y pendientes
+        val tvCompleted = view.findViewById<TextView>(R.id.tv_completed_tasks_count)
+        val tvPending = view.findViewById<TextView>(R.id.tv_pending_tasks_count)
+        val tareaViewModel = ViewModelProvider(requireActivity(), ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[TareaRoomViewModel::class.java]
+        lifecycleScope.launch {
+            tareaViewModel.getCompletadasUltimoMes().collectLatest { lista ->
+                tvCompleted.text = lista.size.toString()
+            }
+        }
+        lifecycleScope.launch {
+            tareaViewModel.getPendientes().collectLatest { lista ->
+                tvPending.text = lista.size.toString()
+            }
+        }
+        // Tareas para hoy
+        val rvTasksToday = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_tasks_today_stats)
+        val tasksTodayAdapter = TasksAdapter { tarea ->
+            // Aqui poner para redirigir a detalles
+        }
+        rvTasksToday.layoutManager = LinearLayoutManager(requireContext())
+        rvTasksToday.adapter = tasksTodayAdapter
+        lifecycleScope.launch {
+            tareaViewModel.getParaHoy().collectLatest { lista ->
+                tasksTodayAdapter.submitList(lista)
+            }
+        }
 
-        viewModel.stats.observe(viewLifecycleOwner) { stats ->
-            box1Value.text = stats.completedTasks.toString()
-            box2Value.text = stats.habitsDone.toString()
-            box3Value.text = "${stats.streak} días"
-            box4Value.text = "${stats.totalProgressPercent}%"
+        // Hábitos completados y activos
+        val tvCompletedHabits = view.findViewById<TextView>(R.id.tv_completed_habits_count)
+        val tvActiveHabits = view.findViewById<TextView>(R.id.tv_active_habits_count)
+        val habitoViewModel = ViewModelProvider(requireActivity(), ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[HabitoRoomViewModel::class.java]
+        lifecycleScope.launch {
+            habitoViewModel.getCompletadosUltimoMes().collectLatest { lista ->
+                tvCompletedHabits.text = lista.size.toString()
+            }
+        }
+        lifecycleScope.launch {
+            habitoViewModel.getActivos().collectLatest { lista ->
+                tvActiveHabits.text = lista.size.toString()
+            }
         }
 
         return view

@@ -10,7 +10,7 @@ import com.example.habitapp.data.entity.*
 
 @Database(
     entities = [Usuario::class, Habito::class, RegistroHabito::class, Tarea::class, Recordatorio::class],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 @TypeConverters(Converters::class)
@@ -29,8 +29,17 @@ abstract class AppDatabase : RoomDatabase() {
                 context.applicationContext,
                 AppDatabase::class.java,
                 "habitapp.db"
-            ).fallbackToDestructiveMigration().build().also { INSTANCE = it }
+            )
+            .addMigrations(MIGRATION_1_2)
+            .fallbackToDestructiveMigration()
+            .build().also { INSTANCE = it }
+        }
+
+        // MIGRACIÓN: Añadir columna fechaCreacion a habito
+        private val MIGRATION_1_2 = object : androidx.room.migration.Migration(1, 2) {
+            override fun migrate(db: androidx.sqlite.db.SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE habito ADD COLUMN fechaCreacion INTEGER NOT NULL DEFAULT 0")
+            }
         }
     }
 }
-
