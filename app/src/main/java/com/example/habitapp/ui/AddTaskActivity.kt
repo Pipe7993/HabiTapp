@@ -22,6 +22,7 @@ import com.example.habitapp.data.entity.Prioridad
 import com.example.habitapp.data.entity.Tarea
 import com.example.habitapp.viewmodel.TareaRoomViewModel
 import com.example.habitapp.viewmodel.TasksViewModel
+import com.example.habitapp.viewmodel.DaoProvider
 import com.google.android.material.textfield.TextInputEditText
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -218,9 +219,14 @@ class AddTaskActivity : AppCompatActivity() {
     private fun programarNotificacionTarea(taskId: Long, title: String, description: String, fechaLimite: Long) {
         val delay = fechaLimite - System.currentTimeMillis() - 60 * 60 * 1000 // 1 hora antes
         if (delay > 0) {
+            // Obtener el nombre del usuario (id 1 por defecto)
+            val nombreUsuario = runBlocking {
+                DaoProvider.usuarioDao.getById(1L)?.nombre ?: "Usuario"
+            }
+            val textoNotificacion = "$nombreUsuario - $title es en 1 hora"
             val data = Data.Builder()
                 .putString("title", title)
-                .putString("description", description)
+                .putString("description", textoNotificacion)
                 .putLong("taskId", taskId)
                 .build()
             val request = OneTimeWorkRequestBuilder<TaskNotificationWorker>()
