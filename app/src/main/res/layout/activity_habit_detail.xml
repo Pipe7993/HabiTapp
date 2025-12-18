@@ -122,8 +122,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="8dp"
                         android:progress="85"
-                        android:progressTint="#673AB7"
-                        android:progressBackgroundTint="#E0E0E0" />
+                        android:progressTint="@color/purple_700"
+                        android:progressBackgroundTint="@color/progress_bg" />
 
                     <TextView
                         android:id="@+id/tv_detail_habit_progress"
@@ -167,4 +167,3 @@
     </ScrollView>
 
 </LinearLayout>
-

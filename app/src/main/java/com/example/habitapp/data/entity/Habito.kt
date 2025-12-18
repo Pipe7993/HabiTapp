@@ -24,8 +24,8 @@ data class Habito(
     val descripcion: String,
     val tipo: TipoHabito,
     val completado: Boolean = false,
-    val idUsuario: Long
+    val idUsuario: Long,
+    val fechaCreacion: Long = System.currentTimeMillis()
 )
 
 enum class TipoHabito { DIARIO, SEMANAL }
-

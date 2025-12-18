@@ -1,4 +1,3 @@
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -61,8 +60,10 @@ dependencies {
     // Coroutines
     implementation(libs.org.jetbrains.kotlinx.coroutines.android)
 
+    // WorkManager
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
-

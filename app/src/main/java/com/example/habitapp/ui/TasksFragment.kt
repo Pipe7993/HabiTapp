@@ -6,21 +6,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.habitapp.R
-import com.example.habitapp.viewmodel.TasksViewModel
+import com.example.habitapp.viewmodel.TareaRoomViewModel
+import com.example.habitapp.data.entity.Tarea
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.textfield.TextInputEditText
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import androidx.lifecycle.Lifecycle
 
 class TasksFragment : Fragment() {
     private lateinit var adapter: TasksAdapter
-    private lateinit var viewModel: TasksViewModel
+    private lateinit var tareaViewModel: TareaRoomViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_tasks, container, false)
@@ -46,12 +55,12 @@ class TasksFragment : Fragment() {
         val dateFormat = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "ES"))
         headerSubtitle.text = dateFormat.format(Date())
 
-        viewModel = ViewModelProvider(requireActivity())[TasksViewModel::class.java]
+        tareaViewModel = ViewModelProvider(requireActivity(), ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[TareaRoomViewModel::class.java]
 
         val rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_tasks)
-        adapter = TasksAdapter { item ->
+        adapter = TasksAdapter { tarea ->
             val intent = Intent(requireContext(), TaskDetailActivity::class.java)
-            intent.putExtra("TASK_ID", item.id)
+            intent.putExtra("TASK_ID", tarea.idTarea)
             startActivity(intent)
         }
         rv.layoutManager = LinearLayoutManager(requireContext())
@@ -63,9 +72,31 @@ class TasksFragment : Fragment() {
             startActivity(intent)
         }
 
-        viewModel.tasks.observe(viewLifecycleOwner) { list ->
-            adapter.submitList(list)
+        val etSearch = view.findViewById<TextInputEditText>(R.id.et_search_task)
+        var listaActual: List<Tarea> = emptyList()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                tareaViewModel.tareas.collectLatest { lista ->
+                    listaActual = lista
+                    adapter.submitList(lista)
+                }
+            }
         }
+        etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val query = s?.toString()?.trim()?.lowercase() ?: ""
+                if (query.isEmpty()) {
+                    adapter.submitList(listaActual)
+                } else {
+                    val filtrada = listaActual.filter { tarea ->
+                        tarea.titulo.lowercase().contains(query) || tarea.descripcion.lowercase().contains(query)
+                    }
+                    adapter.submitList(filtrada)
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
         return view
     }

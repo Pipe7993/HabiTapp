@@ -12,44 +12,45 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.habitapp.R
+import com.example.habitapp.data.entity.Habito
+import com.example.habitapp.viewmodel.HabitoRoomViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 
 class HabitDetailActivity : AppCompatActivity() {
-    private lateinit var viewModel: HabitsViewModel
-    private var habitId: Int = -1
+    private lateinit var viewModel: HabitoRoomViewModel
+    private var habitId: Long = -1L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(R.layout.activity_habit_detail)
 
-        // Make the status bar use the same purple as the header
-        window.statusBarColor = ContextCompat.getColor(this, R.color.purple_700)
-
-        // Configurar iconos de la status bar en color claro
         val insetsController = WindowCompat.getInsetsController(window, window.decorView)
         insetsController.isAppearanceLightStatusBars = false
 
-        // Configurar header
         val header = findViewById<View>(R.id.header_habit_detail)
         val headerTitle = header.findViewById<TextView>(R.id.tv_header_title)
         val headerSubtitle = header.findViewById<TextView>(R.id.tv_header_subtitle)
 
         ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
             val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            val extraTop = (24 * resources.displayMetrics.density).toInt()
-            v.setPadding(v.paddingLeft, statusBarHeight + extraTop, v.paddingRight, v.paddingBottom)
+            v.setPadding(v.paddingLeft, statusBarHeight + 24, v.paddingRight, v.paddingBottom)
             insets
         }
 
+        // headerTitle.text = "Detalle de Hábito"
+        // headerSubtitle.text = "Información completa"
         headerTitle.text = getString(R.string.habit_detail_title)
         headerSubtitle.text = getString(R.string.habit_detail_subtitle)
 
-        viewModel = ViewModelProvider(this)[HabitsViewModel::class.java]
-
-        habitId = intent.getIntExtra("habit_id", -1)
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))[HabitoRoomViewModel::class.java]
+        habitId = intent.getLongExtra("habit_id", -1L)
 
         val tvName = findViewById<TextView>(R.id.tv_detail_habit_name)
         val tvDescription = findViewById<TextView>(R.id.tv_detail_habit_description)
@@ -61,41 +62,39 @@ class HabitDetailActivity : AppCompatActivity() {
         val btnDelete = findViewById<Button>(R.id.btn_delete_habit)
         val btnBack = findViewById<Button>(R.id.btn_back_to_habits)
 
-        // Observar hábitos y buscar el actual
-        viewModel.habits.observe(this) { habits ->
-            val habit = habits.find { it.id == habitId }
-            if (habit != null) {
-                tvName.text = habit.Nombre
-                tvDescription.text = habit.Descripcion
-                tvStatus.text = if (habit.Activo) "Activo" else "Inactivo"
-                tvFrequency.text = habit.Frecuencia
-                progressBar.progress = habit.Progreso
-                tvProgress.text = "${habit.Progreso}%"
-            } else {
-                Toast.makeText(this, "Hábito no encontrado", Toast.LENGTH_SHORT).show()
-                finish()
+        var habitoActual: Habito? = null
+        lifecycleScope.launch {
+            repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
+                viewModel.habitos.collectLatest { lista ->
+                    if (lista.isEmpty()) return@collectLatest
+                    val habit: Habito? = lista.firstOrNull { it.idHabito == habitId }
+                    habitoActual = habit
+                    if (habit != null) {
+                        tvName.text = habit.titulo
+                        tvDescription.text = habit.descripcion
+                        tvStatus.text = if (habit.completado) getString(R.string.habit_status_completed) else getString(R.string.habit_status_pending)
+                        tvFrequency.text = habit.tipo.name
+                        progressBar.progress = if (habit.completado) 100 else 0
+                        tvProgress.text = if (habit.completado) "100%" else "0%"
+                    } else {
+                        Toast.makeText(this@HabitDetailActivity, "Hábito no encontrado", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }
             }
         }
-
         btnEdit.setOnClickListener {
             val intent = Intent(this, AddHabitActivity::class.java)
             intent.putExtra("habit_id", habitId)
             startActivity(intent)
         }
-
         btnDelete.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setTitle("Eliminar Hábito")
-                .setMessage("¿Estás seguro de que deseas eliminar este hábito?")
-                .setPositiveButton("Eliminar") { _, _ ->
-                    viewModel.deleteHabit(habitId)
-                    Toast.makeText(this, "Hábito eliminado", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-                .setNegativeButton("Cancelar", null)
-                .show()
+            habitoActual?.let {
+                viewModel.delete(it)
+                Toast.makeText(this, "Hábito eliminado", Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
-
         btnBack.setOnClickListener {
             finish()
         }

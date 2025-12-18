@@ -50,14 +50,14 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Fecha (ej: 30/11/2025)"
+                android:hint="Fecha y hora (ej: 30/11/2025 14:00)"
                 android:layout_marginBottom="12dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_task_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="date"
+                    android:inputType="none"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -119,4 +119,3 @@
     </ScrollView>
 
 </LinearLayout>
-

@@ -45,4 +45,9 @@
     <string name="add_habit_subtitle">Completa los datos del hábito</string>
     <string name="edit_habit_title">Editar Hábito</string>
     <string name="edit_habit_subtitle">Modifica los datos del hábito</string>
+
+    <!-- Nuevo strings para HabitsFragment -->
+    <string name="habits_active_count">%1$d hábitos activos</string>
+    <string name="habit_status_completed">Completado</string>
+    <string name="habit_status_pending">Pendiente</string>
 </resources>

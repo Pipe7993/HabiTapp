@@ -13,11 +13,20 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.habitapp.R
+import com.example.habitapp.data.entity.Tarea
+import com.example.habitapp.data.entity.Prioridad
+import com.example.habitapp.viewmodel.TareaRoomViewModel
 import com.example.habitapp.viewmodel.TasksViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 
 class TaskDetailActivity : AppCompatActivity() {
     private lateinit var viewModel: TasksViewModel
+    private lateinit var tareaViewModel: TareaRoomViewModel
     private var taskId: Long = -1
+    private var tareaActual: Tarea? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +62,8 @@ class TaskDetailActivity : AppCompatActivity() {
         headerSubtitle.text = getString(R.string.task_detail_subtitle)
 
         viewModel = ViewModelProvider(this)[TasksViewModel::class.java]
-
-        taskId = intent.getLongExtra("TASK_ID", -1)
+        tareaViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))[TareaRoomViewModel::class.java]
+        val tareaId = intent.getLongExtra("TASK_ID", -1L)
 
         val tvTitle = findViewById<TextView>(R.id.tv_detail_task_title)
         val tvDescription = findViewById<TextView>(R.id.tv_detail_task_description)
@@ -63,43 +72,56 @@ class TaskDetailActivity : AppCompatActivity() {
         val btnEdit = findViewById<Button>(R.id.btn_edit_task)
         val btnDelete = findViewById<Button>(R.id.btn_delete_task)
         val btnBack = findViewById<Button>(R.id.btn_back_to_tasks)
+        val btnComplete = findViewById<Button>(R.id.btn_complete_task)
 
-        viewModel.tasks.observe(this) { tasks ->
-            val task = tasks.find { it.id == taskId }
-            if (task != null) {
-                tvTitle.text = task.title
-                tvDescription.text = task.subtitle
-                tvTime.text = task.time
-                tvPriority.text = task.priority
-
-                when (task.priority.lowercase()) {
-                    "alta" -> tvPriority.setBackgroundResource(R.drawable.bg_tag_red)
-                    "media" -> tvPriority.setBackgroundResource(R.drawable.bg_tag_orange)
-                    "baja" -> tvPriority.setBackgroundResource(R.drawable.bg_tag_blue)
+        lifecycleScope.launch {
+            repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
+                tareaViewModel.tareas.collectLatest { lista ->
+                    if (lista.isEmpty()) return@collectLatest
+                    val tarea = lista.firstOrNull { it.idTarea == tareaId }
+                    tareaActual = tarea
+                    if (tarea != null) {
+                        tvTitle.text = tarea.titulo
+                        tvDescription.text = tarea.descripcion
+                        tvTime.text = tarea.fechaLimite?.let { java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(java.util.Date(it)) } ?: "Sin fecha"
+                        tvPriority.text = when (tarea.prioridad) {
+                            Prioridad.ALTA -> "Alta"
+                            Prioridad.MEDIA -> "Media"
+                            Prioridad.BAJA -> "Baja"
+                        }
+                        when (tarea.prioridad) {
+                            Prioridad.ALTA -> tvPriority.setBackgroundResource(R.drawable.bg_tag_red)
+                            Prioridad.MEDIA -> tvPriority.setBackgroundResource(R.drawable.bg_tag_orange)
+                            Prioridad.BAJA -> tvPriority.setBackgroundResource(R.drawable.bg_tag_blue)
+                        }
+                        btnComplete.text = if (tarea.estado == com.example.habitapp.data.entity.EstadoTarea.COMPLETADA) "Marcar como pendiente" else "Marcar como completada"
+                    } else {
+                        Toast.makeText(this@TaskDetailActivity, "Tarea no encontrada", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
                 }
-            } else {
-                Toast.makeText(this, "Tarea no encontrada", Toast.LENGTH_SHORT).show()
-                finish()
             }
         }
-
+        btnComplete.setOnClickListener {
+            tareaActual?.let { tarea ->
+                val nuevoEstado = if (tarea.estado == com.example.habitapp.data.entity.EstadoTarea.COMPLETADA)
+                    com.example.habitapp.data.entity.EstadoTarea.PENDIENTE
+                else
+                    com.example.habitapp.data.entity.EstadoTarea.COMPLETADA
+                tareaViewModel.cambiarEstado(tarea.idTarea, nuevoEstado)
+            }
+        }
         btnEdit.setOnClickListener {
             val intent = android.content.Intent(this, AddTaskActivity::class.java)
-            intent.putExtra("TASK_ID", taskId)
+            intent.putExtra("TASK_ID", tareaId)
             startActivity(intent)
         }
-
         btnDelete.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setTitle("Eliminar Tarea")
-                .setMessage("¿Estás seguro de que deseas eliminar esta tarea?")
-                .setPositiveButton("Eliminar") { _, _ ->
-                    viewModel.removeTask(taskId)
-                    Toast.makeText(this, "Tarea eliminada", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-                .setNegativeButton("Cancelar", null)
-                .show()
+            tareaActual?.let {
+                tareaViewModel.delete(it)
+                Toast.makeText(this, "Tarea eliminada", Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
 
         btnBack.setOnClickListener {

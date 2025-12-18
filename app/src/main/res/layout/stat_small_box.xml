@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_weight="1"
     android:padding="12dp"
-    android:background="#F6F6FB"
+    android:background="@color/box_background"
     android:layout_margin="4dp"
     android:clipToPadding="false"
     android:clipToOutline="true"
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:text="@string/stat_label_sample"
         android:textSize="12sp"
-        android:textColor="#616161" />
+        android:textColor="@color/text_hint" />
 
     <TextView
         android:id="@+id/tv_stat_value"

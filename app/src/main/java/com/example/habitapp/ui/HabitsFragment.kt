@@ -10,14 +10,28 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habitapp.R
-import com.example.habitapp.model.Habito
+import com.example.habitapp.data.entity.Habito
+import com.example.habitapp.viewmodel.HabitoRoomViewModel
+import com.example.habitapp.viewmodel.TareaRoomViewModel
+import com.example.habitapp.data.entity.Tarea
+import com.example.habitapp.ui.TasksAdapter
+import com.google.android.material.textfield.TextInputEditText
+import android.text.Editable
+import android.text.TextWatcher
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class HabitsFragment : Fragment() {
-    private val viewModel: HabitsViewModel by viewModels()
+    private val viewModel: HabitoRoomViewModel by viewModels {
+        ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_habits, container, false)
@@ -33,26 +47,23 @@ class HabitsFragment : Fragment() {
 
         // Ajustar padding superior del header para que cubra la status bar
         ViewCompat.setOnApplyWindowInsetsListener(header) { v, insets ->
-            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            // Convert 24dp to pixels
-            val extraTop = (24 * resources.displayMetrics.density).toInt()
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
             v.setPadding(
                 v.paddingLeft,
-                statusBarHeight + extraTop,
+                statusBarHeight,
                 v.paddingRight,
                 v.paddingBottom
             )
             insets
         }
 
-        headerTitle.text = "Mis Hábitos"
-        headerSubtitle.text = "4 hábitos activos"
+        headerTitle.text = getString(R.string.title_habits)
 
         val recycler = view.findViewById<RecyclerView>(R.id.recycler_habits)
 
         val adapter = HabitsAdapter { habit ->
             val detailIntent = Intent(requireContext(), HabitDetailActivity::class.java)
-            detailIntent.putExtra("habit_id", habit.id)
+            detailIntent.putExtra("habit_id", habit.idHabito)
             startActivity(detailIntent)
         }
         recycler.layoutManager = LinearLayoutManager(requireContext())
@@ -64,22 +75,59 @@ class HabitsFragment : Fragment() {
             startActivity(Intent(requireContext(), AddHabitActivity::class.java))
         }
 
-        viewModel.habits.observe(viewLifecycleOwner, Observer { lista ->
-            adapter.submitList(lista)
-            // Actualizar subtítulo del header con el número de hábitos
-            headerSubtitle.text = "${lista.size} hábitos activos"
+        // Recoger los hábitos desde Room
+        val etSearch = view.findViewById<TextInputEditText>(R.id.et_search_habit)
+        var listaActual: List<Habito> = emptyList()
+        lifecycleScope.launch {
+            viewModel.habitos.collectLatest { lista ->
+                listaActual = lista
+                adapter.submitList(lista)
+                headerSubtitle.text = getString(R.string.habits_active_count, lista.size)
+            }
+        }
+        etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val query = s?.toString()?.trim()?.lowercase() ?: ""
+                if (query.isEmpty()) {
+                    adapter.submitList(listaActual)
+                } else {
+                    val filtrada = listaActual.filter { habito ->
+                        habito.titulo.lowercase().contains(query) || (habito.descripcion?.lowercase()?.contains(query) ?: false)
+                    }
+                    adapter.submitList(filtrada)
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {}
         })
+
+        // Tareas para hoy
+        val recyclerTasksToday = view.findViewById<RecyclerView>(R.id.recycler_tasks_today)
+        val tareaViewModel = ViewModelProvider(requireActivity(), ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[TareaRoomViewModel::class.java]
+        val tasksTodayAdapter = TasksAdapter { tarea ->
+            val intent = Intent(requireContext(), TaskDetailActivity::class.java)
+            intent.putExtra("TASK_ID", tarea.idTarea)
+            startActivity(intent)
+        }
+        recyclerTasksToday.layoutManager = LinearLayoutManager(requireContext())
+        recyclerTasksToday.adapter = tasksTodayAdapter
+        // Mostrar tareas para hoy
+        lifecycleScope.launch {
+            tareaViewModel.getParaHoy().collectLatest { lista ->
+                tasksTodayAdapter.submitList(lista)
+            }
+        }
     }
 }
 
 private class HabitsAdapter(
     val onClick: (Habito) -> Unit
-) : RecyclerView.Adapter<HabitViewHolder>() {
-    private var items: List<Habito> = emptyList()
-
-    fun submitList(newItems: List<Habito>) {
-        items = newItems
-        notifyDataSetChanged()
+) : ListAdapter<Habito, HabitViewHolder>(DIFF) {
+    companion object {
+        val DIFF = object : DiffUtil.ItemCallback<Habito>() {
+            override fun areItemsTheSame(oldItem: Habito, newItem: Habito): Boolean = oldItem.idHabito == newItem.idHabito
+            override fun areContentsTheSame(oldItem: Habito, newItem: Habito): Boolean = oldItem == newItem
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabitViewHolder {
@@ -87,10 +135,8 @@ private class HabitsAdapter(
         return HabitViewHolder(view, onClick)
     }
 
-    override fun getItemCount(): Int = items.size
-
     override fun onBindViewHolder(holder: HabitViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(getItem(position))
     }
 }
 
@@ -98,20 +144,18 @@ private class HabitViewHolder(
     itemView: View,
     val onClick: (Habito) -> Unit
 ) : RecyclerView.ViewHolder(itemView) {
-    fun bind(habit: Habito) {
-        val name = itemView.findViewById<android.widget.TextView>(R.id.text_habit_name)
-        val desc = itemView.findViewById<android.widget.TextView>(R.id.text_habit_desc)
-        val status = itemView.findViewById<android.widget.TextView>(R.id.text_habit_status)
-        val frequency = itemView.findViewById<android.widget.TextView>(R.id.text_habit_frequency)
-        val progress = itemView.findViewById<android.widget.ProgressBar>(R.id.progress_habit)
-        val progressText = itemView.findViewById<android.widget.TextView>(R.id.text_habit_progress)
+    private val name: TextView = itemView.findViewById(R.id.text_habit_name)
+    private val desc: TextView = itemView.findViewById(R.id.text_habit_desc)
+    private val status: TextView = itemView.findViewById(R.id.text_habit_status)
+    private val progress: android.widget.ProgressBar = itemView.findViewById(R.id.progress_habit)
+    private val progressText: TextView = itemView.findViewById(R.id.text_habit_progress)
 
-        name.text = habit.Nombre
-        desc.text = habit.Descripcion
-        status.text = if (habit.Activo) "Activo" else "Inactivo"
-        frequency.text = habit.Frecuencia
-        progress.progress = habit.Progreso
-        progressText.text = "${habit.Progreso}%"
+    fun bind(habit: Habito) {
+        name.text = habit.titulo
+        desc.text = habit.descripcion
+        status.text = if (habit.completado) itemView.context.getString(R.string.habit_status_completed) else itemView.context.getString(R.string.habit_status_pending)
+        progress.progress = if (habit.completado) 100 else 0
+        progressText.text = if (habit.completado) "100%" else "0%"
 
         itemView.setOnClickListener { onClick(habit) }
     }

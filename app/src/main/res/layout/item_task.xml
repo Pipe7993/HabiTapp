@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:text="Descripción breve"
             android:textSize="13sp"
-            android:textColor="#757575"
+            android:textColor="@color/text_secondary"
             android:layout_marginTop="4dp" />
 
         <LinearLayout
@@ -46,7 +46,7 @@
                 android:layout_weight="1"
                 android:text="10:00"
                 android:textSize="12sp"
-                android:textColor="#616161" />
+                android:textColor="@color/text_hint" />
 
             <TextView
                 android:id="@+id/tv_task_priority"
@@ -59,7 +59,7 @@
                 android:paddingRight="8dp"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:textColor="#FFFFFF" />
+                android:textColor="@color/white" />
         </LinearLayout>
 
     </LinearLayout>

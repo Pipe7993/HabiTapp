@@ -7,7 +7,7 @@
     android:background="@drawable/header_purple_gradient"
     android:paddingStart="24dp"
     android:paddingEnd="24dp"
-    android:paddingTop="48dp"
+    android:paddingTop="0dp"
     android:paddingBottom="32dp"
     android:fitsSystemWindows="false">
 
@@ -31,4 +31,3 @@
         android:layout_marginTop="4dp" />
 
 </LinearLayout>
-

@@ -3,7 +3,6 @@ package com.example.habitapp.ui
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -25,9 +24,6 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        // Make the status bar use the same purple as the header
-        window.statusBarColor = ContextCompat.getColor(this, R.color.purple_700)
-
         WindowCompat.getInsetsController(window, window.decorView).apply {
             isAppearanceLightStatusBars = false
         }
@@ -35,10 +31,8 @@ class MainActivity : AppCompatActivity() {
         val container = findViewById<View>(R.id.fragment_contenedor)
         val barraNavegacion = findViewById<BottomNavigationView>(R.id.barra_navegacion)
 
-        // Don't add top padding to container - fragments will handle their own header padding
         ViewCompat.setOnApplyWindowInsetsListener(container) { v, insets ->
             val navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
-            // Only add bottom padding for navigation bar
             v.setPadding(0, 0, 0, navBars.bottom)
             insets
         }
