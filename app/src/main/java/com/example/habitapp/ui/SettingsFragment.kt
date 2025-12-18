@@ -1,9 +1,11 @@
 package com.example.habitapp.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -11,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.habitapp.R
 import com.example.habitapp.viewmodel.SettingsViewModel
+import kotlinx.coroutines.launch
 
 class SettingsFragment : Fragment() {
     private lateinit var viewModel: SettingsViewModel
@@ -51,6 +54,28 @@ class SettingsFragment : Fragment() {
         swNot.setOnCheckedChangeListener { _, isChecked -> viewModel.setNotifications(isChecked) }
         swDark.setOnCheckedChangeListener { _, isChecked -> viewModel.setDarkMode(isChecked) }
         swRem.setOnCheckedChangeListener { _, isChecked -> viewModel.setReminders(isChecked) }
+
+        val tvNombreUsuario = view.findViewById<TextView>(R.id.tv_nombre_usuario)
+        viewModel.nombreUsuario.observe(viewLifecycleOwner) { nombre ->
+            tvNombreUsuario.text = nombre
+        }
+        viewModel.cargarNombreUsuario(1L)
+
+        val btnEditarPerfil = view.findViewById<View>(R.id.btn_editar_perfil)
+        btnEditarPerfil.setOnClickListener {
+            val editText = EditText(requireContext())
+            editText.hint = "Nuevo nombre"
+            editText.setText(tvNombreUsuario.text)
+            AlertDialog.Builder(requireContext())
+                .setTitle("Editar nombre de perfil")
+                .setView(editText)
+                .setPositiveButton("Guardar") { _, _ ->
+                    val nuevoNombre = editText.text.toString().trim()
+                    viewModel.actualizarNombreUsuario(1L, nuevoNombre)
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+        }
 
         return view
     }

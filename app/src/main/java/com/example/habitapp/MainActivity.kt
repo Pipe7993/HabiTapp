@@ -8,6 +8,8 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.habitapp.R
+import com.example.habitapp.data.db.AppDatabase
+import com.example.habitapp.viewmodel.DaoProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -19,6 +21,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Inicializar el UsuarioDao para el ViewModel
+        val db = AppDatabase.getInstance(applicationContext)
+        DaoProvider.usuarioDao = db.usuarioDao()
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
