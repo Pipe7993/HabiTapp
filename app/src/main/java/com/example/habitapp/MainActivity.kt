@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        mostrarFragmento(fragmentHabitos)
+        mostrarFragmento(fragmentEstadisticas)
 
         barraNavegacion.setOnItemSelectedListener { item ->
             when (item.itemId) {
