@@ -19,7 +19,8 @@
         android:textStyle="bold"
         android:gravity="center"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/text_primary" />
 
     <Button
         android:id="@+id/btn_editar_perfil"
@@ -29,7 +30,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/purple_500"
-        android:textColor="@android:color/white" />
+        android:textColor="@color/text_primary" />
 
     <ImageView
         android:id="@+id/iv_foto_usuario"
@@ -51,7 +52,7 @@
         android:drawableLeft="@android:drawable/ic_menu_camera"
         android:drawablePadding="8dp"
         android:backgroundTint="@color/purple_500"
-        android:textColor="@android:color/white" />
+        android:textColor="@color/text_primary" />
 
     <ScrollView
         android:layout_width="match_parent"

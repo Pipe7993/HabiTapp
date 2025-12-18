@@ -40,11 +40,12 @@
             android:id="@+id/tv_tasks_today_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tareas para hoy"
+            android:text="Tareas"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp" />
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/text_primary" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_tasks_today"
             android:layout_width="match_parent"
