@@ -77,8 +77,12 @@ class TasksFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 tareaViewModel.tareas.collectLatest { lista ->
-                    listaActual = lista
-                    adapter.submitList(lista)
+                    listaActual = lista.sortedWith(compareBy<Tarea> {
+                        it.estado == com.example.habitapp.data.entity.EstadoTarea.COMPLETADA
+                    }.thenBy {
+                        it.fechaLimite ?: Long.MAX_VALUE
+                    })
+                    adapter.submitList(listaActual)
                 }
             }
         }
