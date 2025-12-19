@@ -19,9 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.habitapp.R
 import com.example.habitapp.data.entity.Habito
 import com.example.habitapp.viewmodel.HabitoRoomViewModel
-import com.example.habitapp.viewmodel.TareaRoomViewModel
-import com.example.habitapp.data.entity.Tarea
-import com.example.habitapp.ui.TasksAdapter
 import com.google.android.material.textfield.TextInputEditText
 import android.text.Editable
 import android.text.TextWatcher
@@ -100,23 +97,6 @@ class HabitsFragment : Fragment() {
             }
             override fun afterTextChanged(s: Editable?) {}
         })
-
-        // Tareas para hoy
-        val recyclerTasksToday = view.findViewById<RecyclerView>(R.id.recycler_tasks_today)
-        val tareaViewModel = ViewModelProvider(requireActivity(), ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[TareaRoomViewModel::class.java]
-        val tasksTodayAdapter = TasksAdapter { tarea ->
-            val intent = Intent(requireContext(), TaskDetailActivity::class.java)
-            intent.putExtra("TASK_ID", tarea.idTarea)
-            startActivity(intent)
-        }
-        recyclerTasksToday.layoutManager = LinearLayoutManager(requireContext())
-        recyclerTasksToday.adapter = tasksTodayAdapter
-        // Mostrar tareas para hoy
-        lifecycleScope.launch {
-            tareaViewModel.getParaHoy().collectLatest { lista ->
-                tasksTodayAdapter.submitList(lista)
-            }
-        }
     }
 }
 
