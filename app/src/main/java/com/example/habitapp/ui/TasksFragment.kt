@@ -51,7 +51,7 @@ class TasksFragment : Fragment() {
             insets
         }
 
-        headerTitle.text = "Tareas de Hoy"
+        headerTitle.text = "Tareas"
         val dateFormat = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "ES"))
         headerSubtitle.text = dateFormat.format(Date())
 

@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import com.example.habitapp.R
 import com.example.habitapp.viewmodel.SettingsViewModel
+import java.io.File
 
 class SettingsFragment : Fragment() {
     private lateinit var viewModel: SettingsViewModel
