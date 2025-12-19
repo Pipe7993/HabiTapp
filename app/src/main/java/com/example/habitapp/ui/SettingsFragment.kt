@@ -25,6 +25,7 @@ class SettingsFragment : Fragment() {
     private lateinit var viewModel: SettingsViewModel
     private var tempCameraUri: Uri? = null
     private var lastPhotoUri: String? = null
+    private var showPhotoCongrats: Boolean = false // <-- NUEVA BANDERA
 
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         uri?.let {
@@ -32,13 +33,17 @@ class SettingsFragment : Fragment() {
                 it,
                 Intent.FLAG_GRANT_READ_URI_PERMISSION
             )
+            showPhotoCongrats = true // <-- Solo cuando el usuario selecciona una foto
             viewModel.actualizarFotoUsuario(1L, it.toString())
         }
     }
 
     private val takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success: Boolean ->
         if (success) {
-            tempCameraUri?.let { viewModel.actualizarFotoUsuario(1L, it.toString()) }
+            tempCameraUri?.let {
+                showPhotoCongrats = true // <-- Solo cuando el usuario toma una foto
+                viewModel.actualizarFotoUsuario(1L, it.toString())
+            }
         }
     }
 
@@ -74,15 +79,11 @@ class SettingsFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
 
         val swNot = view.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.switch_notifications)
-        val swDark = view.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.switch_darkmode)
-        val swRem = view.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.switch_reminders)
         val ivFoto = view.findViewById<android.widget.ImageView>(R.id.iv_foto_usuario)
         val btnQuitarFoto = view.findViewById<View>(R.id.btn_quitar_foto)
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
             swNot.isChecked = state.notifications
-            swDark.isChecked = state.darkMode
-            swRem.isChecked = state.reminders
         }
 
         viewModel.fotoUsuario.observe(viewLifecycleOwner) { uriString ->
@@ -94,18 +95,17 @@ class SettingsFragment : Fragment() {
 
             val previous = lastPhotoUri
             lastPhotoUri = uriString
-            if (!uriString.isNullOrBlank() && uriString != previous) {
+            if (!uriString.isNullOrBlank() && uriString != previous && showPhotoCongrats) {
                 AlertDialog.Builder(requireContext())
                     .setTitle("¡Foto actualizada!")
                     .setMessage("Tu perfil se ve genial con la nueva foto.")
                     .setPositiveButton("Cerrar", null)
                     .show()
+                showPhotoCongrats = false // <-- Resetear bandera
             }
         }
 
         swNot.setOnCheckedChangeListener { _, isChecked -> viewModel.setNotifications(isChecked) }
-        swDark.setOnCheckedChangeListener { _, isChecked -> viewModel.setDarkMode(isChecked) }
-        swRem.setOnCheckedChangeListener { _, isChecked -> viewModel.setReminders(isChecked) }
 
         val tvNombreUsuario = view.findViewById<TextView>(R.id.tv_nombre_usuario)
         viewModel.nombreUsuario.observe(viewLifecycleOwner) { nombre ->

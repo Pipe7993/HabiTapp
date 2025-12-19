@@ -51,13 +51,13 @@ class TasksFragment : Fragment() {
             insets
         }
 
-        headerTitle.text = "Tareas de Hoy"
+        headerTitle.text = "Tareas"
         val dateFormat = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "ES"))
         headerSubtitle.text = dateFormat.format(Date())
 
         tareaViewModel = ViewModelProvider(requireActivity(), ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[TareaRoomViewModel::class.java]
 
-        val rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_tasks)
+        val rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recycler_tasks)
         adapter = TasksAdapter { tarea ->
             val intent = Intent(requireContext(), TaskDetailActivity::class.java)
             intent.putExtra("TASK_ID", tarea.idTarea)
