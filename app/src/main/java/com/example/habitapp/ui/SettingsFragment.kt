@@ -1,6 +1,7 @@
 package com.example.habitapp.ui
 
 import android.app.AlertDialog
+import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
@@ -23,6 +24,7 @@ import java.io.File
 class SettingsFragment : Fragment() {
     private lateinit var viewModel: SettingsViewModel
     private var tempCameraUri: Uri? = null
+    private var lastPhotoUri: String? = null
 
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         uri?.let {
@@ -88,6 +90,16 @@ class SettingsFragment : Fragment() {
                 ivFoto.setImageResource(R.drawable.ic_person)
             } else {
                 ivFoto.setImageURI(Uri.parse(uriString))
+            }
+
+            val previous = lastPhotoUri
+            lastPhotoUri = uriString
+            if (!uriString.isNullOrBlank() && uriString != previous) {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("¡Foto actualizada!")
+                    .setMessage("Tu perfil se ve genial con la nueva foto.")
+                    .setPositiveButton("Cerrar", null)
+                    .show()
             }
         }
 
